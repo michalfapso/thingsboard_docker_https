@@ -13,10 +13,14 @@ Choose your preferred docker-compose.yml from this repository and make a copy:
 ```
 cp docker-compose.yml.tb_swag_watchtower docker-compose.yml
 ```
-Edit it to match your server setup and run:
+Edit it to match your server setup. Set the `URL` parameter in the `swag` service's environment params in `docker-compose.yml` to match your server's url (e.g. mydomain.com) and make sure to have a wildcard DNS A record `*.mydomain.com` pointing to your server's IP address.
+
+Run:
 ```
 docker-compose up -d
 ```
+After a minute or two, you should be able to load your Thingsboard webapp at https://tb.mydomain.com
+
 **Warning:** Let's Encrypt has a limit of 5 requests per week, so if you plan to experiment with the configuration a bit, set `STAGING=true` in the `swag` service environment params.
 
 
@@ -27,7 +31,7 @@ the thingsboard image (without https). Source: https://thingsboard.io/docs/user-
 
 - **docker-compose.yml.tb_swag** Thingsboard + SWAG
 ([linuxserver/swag](https://github.com/linuxserver/docker-swag) contains all info about Let's Encrypt parameters).
-SWAG provides the Nginx reverse proxy with automatic Let's Encrypt certificate. The `nginx.thingsboard.subdomain.conf` file was modified from another SWAG config following [@mfalkvidd's](https://gist.github.com/mfalkvidd) config [here](https://gist.github.com/mfalkvidd/3920bd5035806a583b5c1e20eaddabae)
+SWAG provides the Nginx reverse proxy with automatic Let's Encrypt certificate. The `nginx.thingsboard.subdomain.conf` file was modified from another SWAG config following [@mfalkvidd's](https://gist.github.com/mfalkvidd) config [here](https://gist.github.com/mfalkvidd/3920bd5035806a583b5c1e20eaddabae). It sets the `tb` subdomain to be redirected to the Thingsboard service.
 
 - **docker-compose.yml.tb_swag_watchtower** Thingsboard + SWAG + Watchtower. Same as above plus automatic updates
 of the SWAG image provided by [containerrr/watchtower](https://github.com/containrrr/watchtower).
