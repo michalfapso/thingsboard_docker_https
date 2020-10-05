@@ -27,7 +27,7 @@ the thingsboard image (without https). Source: https://thingsboard.io/docs/user-
 
 - **docker-compose.yml.tb_swag** Thingsboard + SWAG
 ([linuxserver/swag](https://github.com/linuxserver/docker-swag) contains all info about Let's Encrypt parameters).
-SWAG provides the Nginx reverse proxy with automatic Let's Encrypt certificate
+SWAG provides the Nginx reverse proxy with automatic Let's Encrypt certificate. The `nginx.thingsboard.subdomain.conf` file was modified from another SWAG config following [@mfalkvidd's](https://gist.github.com/mfalkvidd) config [here](https://gist.github.com/mfalkvidd/3920bd5035806a583b5c1e20eaddabae)
 
 - **docker-compose.yml.tb_swag_watchtower** Thingsboard + SWAG + Watchtower. Same as above plus automatic updates
 of the SWAG image provided by [containerrr/watchtower](https://github.com/containrrr/watchtower).
