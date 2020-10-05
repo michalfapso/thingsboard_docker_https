@@ -1,0 +1,17 @@
+# Following the guide here: https://blog.linuxserver.io/2019/04/25/letsencrypt-nginx-starter-guide/
+
+---
+version: '2.2'
+services:
+  thingsboard:
+    image: "thingsboard/tb-postgres"
+    restart: unless-stopped
+    ports:
+      - "8080:9090" 
+      - "1883:1883"
+      - "5683:5683/udp"
+    environment:
+      - 'TB_QUEUE_TYPE=in-memory'
+    volumes:
+      - ~/.mytb-data:/data
+      - ~/.mytb-logs:/var/log/thingsboard

@@ -1,0 +1,41 @@
+---
+version: '2.2'
+services:
+  swag:
+    image: linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      # Set your own details here:
+      - TZ= # Europe/Bratislava
+      - EMAIL= # info@mydomain.com
+      - URL= # vps.mydomain.com
+      - SUBDOMAINS= # www,tb
+      - VALIDATION=http
+      # When testing, set the STAGING=true, otherwise you may hit the LetsEncrypt limit of 5 certificate requests per week.
+      #- STAGING=true
+    volumes:
+      - ${PWD}/nginx.thingsboard.subdomain.conf:/config/nginx/proxy-confs/thingsboard.subdomain.conf
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
+
+  thingsboard:
+    container_name: thingsboard
+    image: "thingsboard/tb-postgres"
+    restart: unless-stopped
+    ports:
+      # The web port is disabled for Thingsboard. No need to access Thingsboard's webapp directly from outside. Access is allowed only through the nginx reverse proxy.
+      #- "8080:9090" 
+      - "1883:1883"
+      - "5683:5683/udp"
+    environment:
+      TB_QUEUE_TYPE: in-memory
+    volumes:
+      - ~/.mytb-data:/data
+      - ~/.mytb-logs:/var/log/thingsboard
+
