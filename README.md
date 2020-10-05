@@ -7,9 +7,17 @@ The official tutorial for Thingsboard + HAProxy + Let's Encrypt is not dockerize
 
 
 ## Usage
-Choose your preferred docker-compose.yml, edit it to match your setup and run `docker-compose`
+Follow the official tutorial to setup a simple Thingsboard-only service: https://thingsboard.io/docs/user-guide/install/docker/#detaching-stop-and-start-commands
 
-e.g.: `docker-compose -f docker-compose.yml.tb_swag_watchtower`
+Choose your preferred docker-compose.yml from this repository and make a copy:
+```
+cp docker-compose.yml.tb_swag_watchtower docker-compose.yml
+```
+Edit it to match your server setup and run:
+```
+docker-compose up -d
+```
+**Warning:** Let's Encrypt has a limit of 5 requests per week, so if you plan to experiment with the configuration a bit, set `STAGING=true` in the `swag` service environment params.
 
 
 ## Description of docker-compose.yml files
@@ -23,3 +31,16 @@ SWAG provides the Nginx reverse proxy with automatic Let's Encrypt certificate
 
 - **docker-compose.yml.tb_swag_watchtower** Thingsboard + SWAG + Watchtower. Same as above plus automatic updates
 of the SWAG image provided by [containerrr/watchtower](https://github.com/containrrr/watchtower).
+
+
+## Troubleshooting
+When I ran the compose for the first time, it started correctly, but when I restarted it, I got:
+```
+org.postgresql.util.PSQLException: Connection to localhost:5432 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+```
+The solution found by [@pieromacaluso](https://github.com/pieromacaluso) in [this issue](https://github.com/thingsboard/thingsboard/issues/3439) was to run again the following:
+```
+sudo chown -R 799:799 ~/.mytb-data
+sudo chown -R 799:799 ~/.mytb-logs
+```
+After this, Thingsboard started well everytime.
